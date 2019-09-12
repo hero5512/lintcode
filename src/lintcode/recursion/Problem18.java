@@ -11,32 +11,31 @@ public class Problem18 {
      */
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         // write your code here
-        List<List<Integer>> result = new ArrayList<>();
+        List<List<Integer>> results = new ArrayList<>();
+        if (nums == null) {
+            return results;
+        }
         Arrays.sort(nums);
-        subsetsWithDupCore(nums, new ArrayList<>(), 0, result);
-        return result;
+        ArrayList<Integer> subset = new ArrayList<>();
+        subsetsWithDupCore(nums, 0, subset, results);
+        return results;
     }
 
-    private void subsetsWithDupCore(int[] nums, List<Integer> subset, int index, List<List<Integer>> result) {
-
-        if (index == nums.length) {
-            result.add(new ArrayList<>(subset));
-            return;
-        }
-
-            subset.add(nums[index]);
-            subsetsWithDupCore(nums, subset, index + 1, result);
-        if ((index != 0 && nums[index - 1] != nums[index])) {
+    public void subsetsWithDupCore(int[] nums, int startIndex, List<Integer> subset, List<List<Integer>> results) {
+        results.add(new ArrayList<>(subset));
+        for (int i = startIndex; i < nums.length; i++) {
+            if (i != startIndex && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            subset.add(nums[i]);
+            subsetsWithDupCore(nums, i + 1, subset, results);
             subset.remove(subset.size() - 1);
-            subsetsWithDupCore(nums, subset, index + 1, result);
-        } else {
-            subsetsWithDupCore(nums, subset, index + 1, result);
         }
     }
 
     public static void main(String[] args) {
         Problem18 p = new Problem18();
-        int[] input = {0};
+        int[] input = {1, 2};
         p.subsetsWithDup(input);
     }
 }
