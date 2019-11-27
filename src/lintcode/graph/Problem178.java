@@ -101,6 +101,43 @@ public class Problem178 {
         return graph;
     }
 
+    class UnionFind {
+
+        private int[] id;
+        private int count;
+
+        public UnionFind(int N) {
+            id = new int[N];
+            count = N;
+            for (int i = 0; i < N; i++) {
+                id[i] = i;
+            }
+        }
+
+        public int find(int p) {
+            return id[p];
+        }
+
+        public boolean connected(int p, int q) {
+            return find(p) == find(q);
+        }
+
+        public int count() {
+            return count;
+        }
+
+        public void union(int p, int q) {
+            int pID = find(p);
+            int qID = find(q);
+            if (pID == qID)
+                return;
+            for (int i = 0; i < id.length; i++) {
+                if (id[i] == pID) id[i] = qID;
+            }
+            count--;
+        }
+    }
+
     /**
      * union find
      *
@@ -117,7 +154,14 @@ public class Problem178 {
             return false;
         }
 
+        UnionFind uf = new UnionFind(n);
 
+        for (int i = 0; i < edges.length; i++) {
+            if (uf.find(edges[i][0]) == uf.find(edges[i][1])) {
+                return false;
+            }
+            uf.union(edges[i][0], edges[i][1]);
+        }
         return true;
     }
 }
